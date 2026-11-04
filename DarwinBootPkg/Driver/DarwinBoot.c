@@ -748,6 +748,9 @@ Boot (
   Args->MemorySizeActual = WindowSize;
   Args->TopOfKernelData = Address + Used;
   CopyMem (Args->Video, Video, sizeof (Video));
+  // XNU uses bit 0 of v_baseAddr to identify a physical framebuffer so that
+  // initialize_screen() maps it after the kernel VM is initialized.
+  Args->Video[0] |= 1;
   Args->DeviceTree = Kernel.Base + TreeAddress - Address;
   Args->DeviceTreeLength = (UINT32)TreeSize;
   CopyMem (Args->CommandLine, CommandLine, sizeof (CommandLine));
